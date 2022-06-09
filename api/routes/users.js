@@ -31,10 +31,10 @@ router.get("/checkchefORadmin/:id", verifyChefORAdmin, (req, res, next) => {
 /////////////////////////////////////////////////////////////////////////////
 
 //UPDATE
-router.put("/:id", verifyUser, updateUser);
+router.put("/:id", verifyAdmin, updateUser);
 
 //DELETE
-router.delete("/:id", verifyUser, deleteUser);
+router.delete("/:id", verifyAdmin, deleteUser);
 
 //GET
 router.get("/:id", verifyUser, getUser);

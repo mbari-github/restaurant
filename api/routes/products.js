@@ -14,9 +14,9 @@ router.put("/:id", verifyAdmin, updateProduct);
 router.delete("/:id", verifyAdmin, deleteProduct);
 
 //GET ok
-router.get("/:id", verifyUser, getProduct);
+router.get("/:id", getProduct);
 
 //GET ALL ok
-router.get("/", verifyUser, getProducts);
+router.get("/", getProducts);
 
 export default router;

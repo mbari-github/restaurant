@@ -1,5 +1,5 @@
 import express from 'express';
-import { addProdToOrder, createOrder, deleteOrder, getOrder, getOrders, updateOrder } from '../controllers/order.js';
+import { createOrder, deleteOrder, getOrder, getOrders, updateOrder } from '../controllers/order.js';
 import { verifyAdmin, verifyChefORAdmin, verifyUser } from "../utils/verifyToken.js";
 
 const router = express.Router();
@@ -7,9 +7,8 @@ const router = express.Router();
 //CREATE ok
 router.post('/:id', verifyUser, createOrder);
 
-//UPDATE 1:ok  2:    (funzionano, ma da admin o chef)
-router.put("/:id", verifyAdmin, updateOrder);
-router.put("/add/:id", verifyUser, addProdToOrder);
+//UPDATE ok
+router.put("/:id/:orderid", verifyUser, updateOrder);
 
 //DELETE ok
 router.delete("/:id", verifyChefORAdmin, deleteOrder);

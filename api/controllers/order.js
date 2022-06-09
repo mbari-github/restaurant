@@ -13,22 +13,13 @@ export const createOrder = async(req, res, next) => {
         next(err);
     }
 };
-//UPDATE 
+
+//UPDATE
 export const updateOrder = async(req, res, next) => {
+    const orderId = req.params.orderid;
     try {
         const updatedOrder = await Order.findByIdAndUpdate(
-            req.params.id, { $set: req.body }, { new: true }
-        );
-        res.status(200).json(updatedOrder)
-    } catch (err) {
-        next(err)
-    }
-};
-//ADD A PRODUCT
-export const addProdToOrder = async(req, res, next) => {
-    try {
-        const updatedOrder = await Order.findByIdAndUpdate(
-            req.params.id, { $push: req.body }, { new: true }
+            orderId, { $push: req.body }, { new: true }
         );
         res.status(200).json(updatedOrder)
     } catch (err) {
