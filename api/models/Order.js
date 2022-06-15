@@ -1,20 +1,21 @@
 import mongoose from "mongoose";
 const OrderSchema = new mongoose.Schema({
-    table: {
-        type: Number,
+    user: {
+        type: mongoose.Schema.Types.ObjectID,
+        ref: "User"
+    },
+    products: {
+        type: [String],
         required: true
     },
-    products: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Product"
-    }],
-    state: {
+    status: {
         type: String,
+        default: "pending"
     },
     taken: {
         type: Boolean,
         default: false
-    },
+    }
 
 
 }, { timestamps: true });

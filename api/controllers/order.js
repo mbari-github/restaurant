@@ -1,18 +1,48 @@
 import Order from "../models/Order.js";
+import User from "../models/User.js";
+import mongoose from "mongoose";
 
 import { createError } from "../utils/error.js";
 
 
 //CREATE
 export const createOrder = async(req, res, next) => {
-    const newOrder = new Order(req.body);
     try {
+        let user;
+        User.findById(req.params.id)
+            .then(USER => user = USER)
+            .then(() => {
+                return Order.create({
+                    user: mongoose.Types.ObjectId(req.params.id),
+                    products: req.body.products,
+                })
+            })
+            .then(ORDER => {
+                user.orders.push(ORDER);
+                user.save();
+            })
+            .then(() => res.json({ message: 'Inserimento effettuato' }));
+    } catch (err) {
+        next(err)
+    }
+};
+/*
+//CREATE
+export const createOrder = async(req, res, next) => {
+    try {
+        const newOrder = new Order(req.body);
         const savedOrder = await newOrder.save();
         res.status(200).json(savedOrder);
+
+        const user = await User.findByIdAndUpdate(
+            req.params.id, { $push: req.body.orders }, { new: true });
+
+        res.status(200).json(user)
+
     } catch (err) {
         next(err);
     }
-};
+};*/
 
 //UPDATE
 export const updateOrder = async(req, res, next) => {
