@@ -4,17 +4,17 @@ const OrderSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
-    products: {
-        type: [String],
-        required: true
-    },
+    products: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Product"
+    }],
     state: {
         type: String,
     },
     taken: {
         type: Boolean,
         default: false
-    }
+    },
 
 
 }, { timestamps: true });

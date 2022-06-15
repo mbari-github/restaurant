@@ -13,7 +13,8 @@ const UserSchema = new mongoose.Schema({
         required: true,
         unique: true,
         trim: true,
-        minLength: 1
+        minLength: 1,
+        text: true
     },
     email: {
         type: String,
@@ -30,6 +31,10 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    orders: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Order"
+    }],
 }, { timestamps: true });
 
 export default mongoose.model("User", UserSchema);
