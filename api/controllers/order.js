@@ -7,6 +7,7 @@ import Product from "../models/Product.js";
 
 
 //CREATE
+//Un ordine per un prodotto --> se si vogliono più prodotti si fanno più ordini
 export const createOrder = async(req, res, next) => {
     try {
 
@@ -63,11 +64,12 @@ export const addProdToOrder = async(req, res, next) => {
 }
 */
 //UPDATE
+//metodo per l'admin o cuoco di gestire lo status dell'ordine
 export const updateOrder = async(req, res, next) => {
     const orderId = req.params.orderId;
     try {
         const updatedOrder = await Order.findByIdAndUpdate(
-            orderId, { $push: req.body }, { new: true }
+            orderId, { $set: req.body }, { new: true }
         );
         res.status(200).json(updatedOrder)
     } catch (err) {
@@ -82,7 +84,6 @@ export const deleteOrder = async(req, res, next) => {
         const user = await User.findByIdAndUpdate(
             req.params.id, { $pull: { orders: req.params.orderId } }, { safe: true }
         );
-
         res.status(200).json("Order has been deleted");
     } catch (err) {
         next(err);
