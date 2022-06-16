@@ -44,9 +44,16 @@ export const getUsers = async(req, res, next) => {
 
 //GET USER'S ORDERS
 export const getUserOrders = async(req, res, next) => {
+    let list = [];
     try {
         const user = await User.findById(req.params.id);
-        res.status(200).json(user.orders)
+
+        user.orders.forEach(element => {
+            Order.findById(element)
+                .then(list.push(element))
+
+        });
+        res.status(200).json(list);
     } catch (err) {
         next(err)
     }
