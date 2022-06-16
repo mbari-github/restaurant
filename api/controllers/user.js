@@ -46,8 +46,7 @@ export const getUsers = async(req, res, next) => {
 //GET USER'S ORDERS
 export const getUserOrders = async(req, res, next) => {
     try {
-        const user = await User.findById(req.params.id);
-        const ORDERS = await Order.find({ _id: { $in: user.orders } })
+        const ORDERS = await Order.find({ user: req.params.id })
         res.status(200).json(ORDERS)
     } catch (err) {
         next(err)
