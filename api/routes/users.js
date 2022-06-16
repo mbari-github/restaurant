@@ -30,8 +30,7 @@ router.get("/checkchefORadmin/:id", verifyChefORAdmin, (req, res, next) => {
     res.send("hello chef/admin")
 });
 /////////////////////////////////////////////////////////////////////////////
-//  GET USER'S ORDER
-router.get("/:id/orders", verifyUser, getUserOrders);
+
 
 //UPDATE
 router.put("/:id", verifyAdmin, updateUser);
@@ -44,5 +43,8 @@ router.get("/:id", verifyUser, getUser);
 
 //GET ALL
 router.get("/", verifyAdmin, getUsers);
+
+//  GET USER'S ORDER
+router.get("/:id/orders", verifyUser, getUserOrders);
 
 export default router;
