@@ -11,7 +11,7 @@ router.post('/:id/:prodId', verifyUser, createOrder);
 router.put("/:orderId", verifyUser, updateOrder);
 
 //DELETE ok
-router.delete("/:id/:orderId", verifyChefORAdmin, deleteOrder);
+router.delete("/:id/:orderId", verifyUser, deleteOrder);
 
 //GET ok
 router.get("/:orderId", verifyChefORAdmin, getOrder);
