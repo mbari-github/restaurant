@@ -5,16 +5,16 @@ import { verifyAdmin, verifyChefORAdmin, verifyUser } from "../utils/verifyToken
 const router = express.Router();
 
 //CREATE ok
-router.post('/:id', verifyUser, createOrder);
+router.post('/:id/:prodId', verifyUser, createOrder);
 
 //UPDATE ok
-router.put("/:id/:orderid", verifyUser, updateOrder);
+router.put("/:id/:orderId", verifyUser, updateOrder);
 
 //DELETE ok
-router.delete("/:id", verifyChefORAdmin, deleteOrder);
+router.delete("/:id/:orderId", verifyChefORAdmin, deleteOrder);
 
 //GET ok
-router.get("/:id", verifyChefORAdmin, getOrder);
+router.get("/:orderId", verifyChefORAdmin, getOrder);
 
 //GET ALL ok
 router.get("/", verifyChefORAdmin, getOrders);

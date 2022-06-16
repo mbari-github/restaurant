@@ -1,3 +1,4 @@
+import Order from "../models/Order.js";
 import User from "../models/User.js";
 
 //UPDATE
@@ -38,5 +39,15 @@ export const getUsers = async(req, res, next) => {
         res.status(200).json(users);
     } catch (err) {
         next(err);
+    }
+};
+
+//GET USER'S ORDERS
+export const getUserOrders = async(req, res, next) => {
+    try {
+        const user = await User.findById(req.params.id);
+        res.status(200).json(user.orders)
+    } catch (err) {
+        next(err)
     }
 };

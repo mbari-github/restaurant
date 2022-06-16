@@ -4,6 +4,7 @@ import {
     deleteUser,
     getUser,
     getUsers,
+    getUserOrders,
 } from "../controllers/user.js";
 import { verifyAdmin, verifyChef, verifyChefORAdmin, verifyToken, verifyUser } from "../utils/verifyToken.js";
 
@@ -29,6 +30,8 @@ router.get("/checkchefORadmin/:id", verifyChefORAdmin, (req, res, next) => {
     res.send("hello chef/admin")
 });
 /////////////////////////////////////////////////////////////////////////////
+//  GET USER'S ORDER
+router.get("/:id/orders", verifyUser, getUserOrders);
 
 //UPDATE
 router.put("/:id", verifyAdmin, updateUser);
