@@ -1,6 +1,7 @@
 import Order from "../models/Order.js";
 import User from "../models/User.js";
 
+
 //UPDATE
 export const updateUser = async(req, res, next) => {
     try {
@@ -44,16 +45,10 @@ export const getUsers = async(req, res, next) => {
 
 //GET USER'S ORDERS
 export const getUserOrders = async(req, res, next) => {
-    let list = [];
     try {
         const user = await User.findById(req.params.id);
-
-        user.orders.forEach(element => {
-            Order.findById(element)
-                .then(list.push(element))
-
-        });
-        res.status(200).json(list);
+        const ORDERS = await Order.find({ _id: { $in: user.orders } })
+        res.status(200).json(ORDERS)
     } catch (err) {
         next(err)
     }
