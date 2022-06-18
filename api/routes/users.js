@@ -19,14 +19,14 @@ router.get("/checkuser/:id", verifyUser, (req, res, next) => {
     res.send("hello user, you are logged in and you can delete your account")
 });
 
-router.get("/checkadmin/:id", verifyAdmin, (req, res, next) => {
+router.get("/checkadmin", verifyAdmin, (req, res, next) => {
     res.send("hello admin, you are logged in and you can delete all accounts")
 });
 
-router.get("/checkchef/:id", verifyChef, (req, res, next) => {
+router.get("/checkchef", verifyChef, (req, res, next) => {
     res.send("hello chef")
 });
-router.get("/checkchefORadmin/:id", verifyChefORAdmin, (req, res, next) => {
+router.get("/checkchefORadmin", verifyChefORAdmin, (req, res, next) => {
     res.send("hello chef/admin")
 });
 /////////////////////////////////////////////////////////////////////////////
