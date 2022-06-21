@@ -40,14 +40,19 @@ export const addProdToOrder = async(req, res, next) => {
         if (user.order === null) {
             const ORDER = await Order.create({
                 user: mongoose.Types.ObjectId(req.params.id),
-                products: [prod]
+                products: [prod],
+                total: prod.price
             });
             user.order = ORDER;
             user.save();
             res.status(200).json(ORDER)
         } else {
-            const ORDER = await Order.findOneAndUpdate({ user: req.params.id }, { $push: { products: prod } }, { new: true });
-            res.status(200).json(ORDER)
+            //const ORDER = await Order.findOneAndUpdate({ user: req.params.id }, { $push: { products: prod } }, { new: true });
+            const order = await Order.findOne({ user: req.params.id });
+            let T = order.total + prod.price;
+            await order.updateOne({ $set: { total: T } }, { new: true });
+            const ORDER = await Order.findByIdAndUpdate(order._id, { $push: { products: prod } }, { new: true })
+            res.status(200).json(ORDER);
         }
     } catch (err) {
         next(err);
@@ -67,11 +72,15 @@ export const updateOrder = async(req, res, next) => {
         next(err)
     }
 };
-//DELETE /:id/:orderId    ok
+//DELETE /:id  ok
 export const deleteOrder = async(req, res, next) => {
     try {
-        await User.findOneAndUpdate({ order: req.params.orderId }, { $set: { order: null } });
-        await Order.findByIdAndDelete(req.params.orderId);
+        //await User.findOneAndUpdate({ order: req.params.orderId }, { $set: { order: null } });
+        //await Order.findByIdAndDelete(req.params.orderId);
+        const user = await User.findById(req.params.id);
+        await Order.findOneAndDelete({ _id: user.order });
+        user.order = null;
+        user.save();
         res.status(200).json("Order has been deleted");
     } catch (err) {
         next(err);
