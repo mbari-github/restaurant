@@ -97,7 +97,7 @@ export const deleteProdFromOrder = async(req, res, next) => {
             let T = order.total - prod.price;
             await Order.findByIdAndUpdate(order._id, { $pull: { products: prod } }, { new: true })
                 .then(ORDER => {
-                    ORDER.total = T
+                    ORDER.total = T;
                     ORDER.save();
                 })
                 .then(() => res.status(200).json({ message: 'Product removed successfully' }));
