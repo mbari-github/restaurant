@@ -6,9 +6,9 @@ import { createError } from "../utils/error.js";
 import Product from "../models/Product.js";
 
 
-//CREATE
+//CREATE OBSOLETO 
 //Un ordine per un prodotto --> se si vogliono più prodotti si fanno più ordini
-export const createOrder = async(req, res, next) => {
+/*export const createOrder = async(req, res, next) => {
     try {
 
         const prod = await Product.findById(req.params.prodId);
@@ -29,41 +29,32 @@ export const createOrder = async(req, res, next) => {
     } catch (err) {
         next(err)
     }
-};
-/*
-\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\DA IGNORARE////////////////////////////////////////////////////////////////////////
-//ADD PROD TO ORDER   PROVA
-//scenario: l'utente inizialmente si trova in una pagina dove scrolla i prodotti presenti nel menù; dopo aver trovato ciò
-//che vuole clicca sul prodotto e viene reiderizzato ad un URL composto da ..../id/prodId, dove il primo id è dell'utente e il secondo è del prodotto.
-//Quindi per questa funzione si ha a disposizione anche l'id del prodotto, che dovrà essere aggiunto alla lista orders dell'utente corrispondente a quell'id
+};*/
 
+//CREATE AND ADD A PROD /:id/:prodId     ok
 export const addProdToOrder = async(req, res, next) => {
     try {
-        const prod = await Product.findById(req.params.prodId);
         const user = await User.findById(req.params.id);
+        const prod = await Product.findById(req.params.prodId);
 
-        if (user.orders.length === 0) {
-            Order.create({
-                    user: mongoose.Types.ObjectId(req.params.id),
-                    products: prod
-                })
-                .then(ORDER => {
-                    user.orders.push(ORDER);
-                    user.save();
-                })
-                .then(() => res.json({ message: 'Inserimento effettuato' }));
-
-        }else{
-            const updatedOrder = await Order.findByIdAndUpdate(
-                user.
-            )
+        if (user.order === null) {
+            const ORDER = await Order.create({
+                user: mongoose.Types.ObjectId(req.params.id),
+                products: [prod]
+            });
+            user.order = ORDER;
+            user.save();
+            res.status(200).json(ORDER)
+        } else {
+            const ORDER = await Order.findOneAndUpdate({ user: req.params.id }, { $push: { products: prod } }, { new: true });
+            res.status(200).json(ORDER)
         }
     } catch (err) {
-        next(err)
+        next(err);
     }
 }
-*/
-//UPDATE
+
+//UPDATE /:id/:orderId
 //metodo per l'admin o cuoco di gestire lo status dell'ordine
 export const updateOrder = async(req, res, next) => {
     const orderId = req.params.orderId;
@@ -76,20 +67,30 @@ export const updateOrder = async(req, res, next) => {
         next(err)
     }
 };
-//DELETE
+//DELETE /:id/:orderId    ok
 export const deleteOrder = async(req, res, next) => {
     try {
+        await User.findOneAndUpdate({ order: req.params.orderId }, { $set: { order: null } });
         await Order.findByIdAndDelete(req.params.orderId);
-
-        const user = await User.findByIdAndUpdate(
-            req.params.id, { $pull: { orders: req.params.orderId } }, { safe: true }
-        );
         res.status(200).json("Order has been deleted");
     } catch (err) {
         next(err);
     }
 };
-//GET
+//(UPDATE) DELETE A SINGLE PROD FROM ORDER /:id/:prodId    ok
+export const deleteProdFromOrder = async(req, res, next) => {
+    try {
+        const prod = await Product.findById(req.params.prodId);
+        const user = await User.findOne({ _id: req.params.id });
+        const updatedOrder = await Order.findByIdAndUpdate({ _id: user.order }, { $pull: { products: prod } }, { new: true });
+
+        res.status(200).json(updatedOrder);
+    } catch (err) {
+        next(err);
+    }
+};
+
+//GET /:orderId
 export const getOrder = async(req, res, next) => {
     try {
         const order = await Order.findById(req.params.orderId);
@@ -98,7 +99,7 @@ export const getOrder = async(req, res, next) => {
         next(err);
     }
 };
-//GET ALL
+//GET ALL /
 export const getOrders = async(req, res, next) => {
     try {
         const orders = await Order.find();

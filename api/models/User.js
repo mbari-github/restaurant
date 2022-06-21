@@ -31,10 +31,11 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    orders: [{
+    order: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Order"
-    }],
+        ref: "Order",
+        default: null
+    },
 }, { timestamps: true });
 
 export default mongoose.model("User", UserSchema);

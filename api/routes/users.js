@@ -36,7 +36,7 @@ router.get("/checkchefORadmin", verifyChefORAdmin, (req, res, next) => {
 router.put("/:id", verifyAdmin, updateUser);
 
 //DELETE
-router.delete("/:id", verifyAdmin, deleteUser);
+router.delete("/:id", verifyUser, deleteUser);
 
 //GET
 router.get("/:id", verifyUser, getUser);

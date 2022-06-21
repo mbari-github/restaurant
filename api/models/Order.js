@@ -4,10 +4,10 @@ const OrderSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectID,
         ref: "User"
     },
-    products: {
+    products: [{
         type: Object,
         required: true
-    },
+    }],
     status: {
         type: String,
         default: "pending"
@@ -16,8 +16,6 @@ const OrderSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     }
-
-
 }, { timestamps: true });
 
 export default mongoose.model("Order", OrderSchema);
