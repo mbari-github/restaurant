@@ -86,14 +86,24 @@ export const deleteOrder = async(req, res, next) => {
         next(err);
     }
 };
-//(UPDATE) DELETE A SINGLE PROD FROM ORDER /:id/:prodId    ok
+//(UPDATE) DELETE A SINGLE PROD FROM ORDER   /:id/:prodId    DA BLOCCARE NEL CASO IN CUI PROD NON è NELL'ORDINE ALTRIMENTI TOTAL VA IN NEGATIVO
 export const deleteProdFromOrder = async(req, res, next) => {
     try {
         const prod = await Product.findById(req.params.prodId);
-        const user = await User.findOne({ _id: req.params.id });
-        const updatedOrder = await Order.findByIdAndUpdate({ _id: user.order }, { $pull: { products: prod } }, { new: true });
+        const order = await Order.findOne({ user: req.params.id });
 
-        res.status(200).json(updatedOrder);
+
+        if (containsObject(prod, order.products)) {
+            let T = order.total - prod.price;
+            await Order.findByIdAndUpdate(order._id, { $pull: { products: prod } }, { new: true })
+                .then(ORDER => {
+                    ORDER.total = T
+                    ORDER.save();
+                })
+                .then(() => res.status(200).json({ message: 'Product removed successfully' }));
+        } else {
+            res.json({ message: 'Prod is not in the order' });
+        }
     } catch (err) {
         next(err);
     }
@@ -117,7 +127,7 @@ export const getOrders = async(req, res, next) => {
         next(err)
     }
 };
-//GET ALL COMPLETED /completed 
+//GET ALL COMPLETED /completed    ok
 export const getCompletedOrder = async(req, res, next) => {
     try {
         const orders = await Order.find({ status: "done" });
@@ -126,3 +136,7 @@ export const getCompletedOrder = async(req, res, next) => {
         next(err);
     }
 };
+
+function containsObject(obj, list) {
+    return list.some(elem => elem.title == obj.title)
+}

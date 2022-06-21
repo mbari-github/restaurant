@@ -10,11 +10,11 @@ router.post('/:id/:prodId', verifyUser, addProdToOrder);
 //DELETE ok
 router.delete("/:id", verifyUser, deleteOrder);
 
-//UPDATE ok
-router.put("/:orderId", verifyChefORAdmin, updateOrder);
-
 //DELETE A SINGLE PROD FROM AN ORDER
 router.put("/:id/:prodId", verifyUser, deleteProdFromOrder)
+
+//UPDATE ok
+router.put("/:orderId", verifyChefORAdmin, updateOrder);
 
 //GET ALL ok
 router.get("/", verifyChefORAdmin, getOrders);
