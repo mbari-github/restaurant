@@ -12,10 +12,6 @@ const OrderSchema = new mongoose.Schema({
         type: String,
         default: "pending"
     },
-    taken: {
-        type: Boolean,
-        default: false
-    }
 }, { timestamps: true });
 
 export default mongoose.model("Order", OrderSchema);

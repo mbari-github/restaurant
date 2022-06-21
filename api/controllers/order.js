@@ -60,7 +60,7 @@ export const updateOrder = async(req, res, next) => {
     const orderId = req.params.orderId;
     try {
         const updatedOrder = await Order.findByIdAndUpdate(
-            orderId, { $set: req.body }, { new: true }
+            orderId, { $set: { status: req.body.status } }, { new: true }
         );
         res.status(200).json(updatedOrder)
     } catch (err) {
@@ -90,7 +90,7 @@ export const deleteProdFromOrder = async(req, res, next) => {
     }
 };
 
-//GET /:orderId
+//GET /:orderId  ok 
 export const getOrder = async(req, res, next) => {
     try {
         const order = await Order.findById(req.params.orderId);
@@ -99,12 +99,21 @@ export const getOrder = async(req, res, next) => {
         next(err);
     }
 };
-//GET ALL /
+//GET ALL /   ok
 export const getOrders = async(req, res, next) => {
     try {
         const orders = await Order.find();
         res.status(200).json(orders);
     } catch (err) {
         next(err)
+    }
+};
+//GET ALL COMPLETED /completed 
+export const getCompletedOrder = async(req, res, next) => {
+    try {
+        const orders = await Order.find({ status: "done" });
+        res.status(200).json(orders);
+    } catch (err) {
+        next(err);
     }
 };

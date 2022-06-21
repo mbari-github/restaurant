@@ -44,7 +44,7 @@ router.get("/:id", verifyUser, getUser);
 //GET ALL
 router.get("/", verifyAdmin, getUsers);
 
-//  GET USER'S ORDER
+//GET USER'S ORDER
 router.get("/:id/orders", verifyUser, getUserOrders);
 
 export default router;
